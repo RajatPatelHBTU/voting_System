@@ -1,0 +1,31 @@
+# Render.com blueprint — one-click free-tier deploy of VoteChain.
+# Docs: https://render.com/docs/blueprint-spec
+# Set the `sync: false` secrets in the Render dashboard after the first deploy.
+services:
+  # ── Backend (Node + Python, via Docker) ─────────────────────────────
+  - type: web
+    name: votechain-backend
+    runtime: docker
+    plan: free
+    dockerfilePath: ./Backend/Dockerfile
+    dockerContext: ./Backend
+    healthCheckPath: /
+    envVars:
+      - key: PORT
+        value: "3000"
+      - key: JWT_SECRET_KEY
+        generateValue: true        # Render generates a strong random secret
+      - key: FRONTEND_URL
+        sync: false                # e.g. https://votechain-frontend.vercel.app
+      - key: MONOGDB_URL
+        sync: false                # MongoDB Atlas connection string
+      - key: CONTRACT_ADDRESS
+        sync: false
+      - key: META_PRIVATE_KEY
+        sync: false
+      - key: MNEOMONIC
+        sync: false
+      - key: GCP_CREDENTIALS_JSON
+        sync: false                # paste the full service-account JSON
+      - key: GCS_BUCKET
+        sync: false
